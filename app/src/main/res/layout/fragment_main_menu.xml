@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools">
+  <FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+      android:id="@+id/base_layout"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="horizontal"
+      android:weightSum="10">
+
+      <RelativeLayout
+        android:id="@+id/bread_container"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="5">
+
+        <ImageView
+          android:id="@+id/bread_background_image"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:scaleType="centerCrop"
+          android:src="@drawable/jpeg_bread"/>
+
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:background="#73000000"/>
+
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerInParent="true"
+          android:layout_centerHorizontal="true"
+          android:textSize="42pt"
+          android:textStyle="bold"
+          android:textColor="@color/off_white"
+          android:text="@string/bread"
+          android:elevation="10dp"
+          android:fontFamily="sans-serif-condensed"/>
+
+      </RelativeLayout>
+
+      <RelativeLayout
+        android:id="@+id/pastries_container"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="5">
+
+        <ImageView
+          android:id="@+id/pastries_background_image"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:scaleType="centerCrop"
+          android:src="@drawable/jpeg_croissants"/>
+
+        <View
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:background="#73000000"/>
+
+        <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_centerInParent="true"
+          android:layout_centerHorizontal="true"
+          android:textSize="42pt"
+          android:textStyle="bold"
+          android:textColor="@color/off_white"
+          android:text="@string/pastries"
+          android:elevation="10dp"
+          android:fontFamily="sans-serif-condensed"/>
+
+      </RelativeLayout>
+
+    </LinearLayout>
+
+  </FrameLayout>
+</layout>

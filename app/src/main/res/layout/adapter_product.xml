@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:orientation="vertical"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <androidx.cardview.widget.CardView
+    android:id="@+id/product_card"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="12dp"
+    android:padding="24dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical"
+      android:padding="24dp"
+      android:weightSum="10">
+
+      <ImageView
+        android:id="@+id/product_image"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="6"
+        tools:src="@drawable/jpeg_double_choc_cookie"/>
+
+      <LinearLayout
+        android:id="@+id/title_and_price_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <TextView
+          android:id="@+id/product_title"
+          android:layout_width="0dp"
+          android:layout_height="match_parent"
+          android:layout_weight="8"
+          android:textStyle="bold"
+          android:textSize="6pt"
+          android:gravity="center_vertical"
+          tools:text="COOKIE DOUBLE CHOCOLAT"/>
+
+        <TextView
+          android:id="@+id/product_price"
+          android:layout_width="0dp"
+          android:layout_height="match_parent"
+          android:layout_weight="2"
+          android:textStyle="bold"
+          android:textSize="6pt"
+          android:gravity="center_vertical|end"
+          tools:text="€1.75"/>
+
+      </LinearLayout>
+
+      <NumberPicker
+        android:id="@+id/product_quantity_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:layout_gravity="center" />
+
+      <Button
+        android:id="@+id/add_to_basket_button"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="ADD TO CART" />
+
+
+    </LinearLayout>
+
+  </androidx.cardview.widget.CardView>
+
+</LinearLayout>

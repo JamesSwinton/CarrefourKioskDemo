@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <color name="colorPrimary">#006CC7</color>
+  <color name="colorPrimaryDark">#0058A6</color>
+  <color name="colorAccent">#E81E24</color>
+
+  <!-- Generic Grey -->
+  <color name="white">#FFFFFF</color>
+  <color name="off_white">#E0E0E0</color>
+  <color name="grey">#444444</color>
+  <color name="disabled_grey">#A3A2A2</color>
+
+  <!-- Custom Dialog Colours -->
+  <color name="success">#4CAF50</color>
+  <color name="info">#0485DF</color>
+  <color name="warn">#FF7043</color>
+  <color name="error">#E6302D</color>
+</resources>

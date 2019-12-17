@@ -1,0 +1,10 @@
+<resources>
+  <string name="app_name">Carrefour Corner PVP Demo</string>
+  <string name="pastries">PATISSERIES</string>
+  <string name="bread">PAINS</string>
+  <string name="basket">Panier</string>
+
+  <!-- TODO: Remove or change this placeholder text -->
+  <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>
