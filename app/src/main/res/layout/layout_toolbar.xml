@@ -10,7 +10,6 @@
     android:background="@color/colorPrimary"
     app:title="@string/app_name"
     app:titleTextColor="@color/white"
-    app:logo="@drawable/toolbar_space_between_icon_and_title"
     app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
     app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
   </androidx.appcompat.widget.Toolbar>

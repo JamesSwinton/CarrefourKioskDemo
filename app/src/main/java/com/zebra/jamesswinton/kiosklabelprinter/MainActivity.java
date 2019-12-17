@@ -90,11 +90,26 @@ public class MainActivity extends AppCompatActivity implements OnProductAddToCar
                 basketQuantity = basketQuantity + mBasket.get(basketProduct);
             }
         } mBasketQuantityTextView.setText(String.valueOf(basketQuantity));
+    }
 
-        // Set Visibility if Required
-        if (mBasketQuantityTextView.getVisibility() == View.GONE) {
-            mBasketQuantityTextView.setVisibility(View.VISIBLE);
+    @Override
+    public void onProductRemovedFromCart(@NonNull Product product) {
+        if (mBasket.containsKey(product)) {
+            // Remove Product
+            mBasket.remove(product);
+
+            // Update Counter
+            updateBasketCounter();
         }
+    }
+
+    public void updateBasketCounter() {
+        Integer basketQuantity = 0;
+        for (Product basketProduct : mBasket.keySet()) {
+            if (mBasket.get(basketProduct) != null) {
+                basketQuantity = basketQuantity + mBasket.get(basketProduct);
+            }
+        } mBasketQuantityTextView.setText(String.valueOf(basketQuantity));
     }
 
     /**
@@ -137,15 +152,10 @@ public class MainActivity extends AppCompatActivity implements OnProductAddToCar
         RelativeLayout basketLayout = (RelativeLayout) menu.findItem(R.id.basket).getActionView();
         mBasketQuantityTextView = basketLayout.findViewById(R.id.toolbar_basket_counter);
 
-        // Hide Basket Badge on Start-up
-        if (mBasket == null || mBasket.isEmpty()) {
-            mBasketQuantityTextView.setVisibility(View.GONE);
-        }
-
         // Set Click Listener to Show BasketFragment
         basketLayout.setOnClickListener(view ->
                 mFragmentManager.beginTransaction()
-                .replace(R.id.fragment_holder, new BasketFragment(mBasket))
+                .replace(R.id.fragment_holder, new BasketFragment())
                 .addToBackStack(BASKET_FRAGMENT)
                 .commit()
         );
@@ -157,6 +167,9 @@ public class MainActivity extends AppCompatActivity implements OnProductAddToCar
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         // Handle Navigation Events
         switch(item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
             case R.id.basket:
                 Log.i(TAG, "Basket Clicked");
                 break;

@@ -7,4 +7,8 @@
   <!-- TODO: Remove or change this placeholder text -->
   <string name="hello_blank_fragment">Hello blank fragment</string>
 
+  <string name="muffin_base64">eJytlD1OxDAQRhNWKAVFKCiR0tPsEXI0+yjUXGKDuEjQFmyHyxSWP+KfsT1DdpeVmFRPz8mMnRk3zb/EAacaW8DWvAcwV6xWNmw54Ap3nlG4DzxlHgKXDwbEIjhXsIvsBOcEfWItmBIOieczPIIXoBLTDiE8sa12XxXYCr8TPjNYtbQBBebL6ug7cD8IPwoG57bmiX/e9wBjy9P5DTAGqx7+RAfBI2MjvBF+EWwFu/p0AoOH8L9YS4/L/ipfe3+8kYfbWJw/dCc8Z8f/7waH/vgitrF/jsRL7K96QjzrfeI5NIgN94evLDZYeOvkK9Ghv6fnpnkMmUL/Oz3qOFY04WqKnW1oYFZxNz/gNXLnPzyU++dAtYV4uqe98+mmcc8naASn9JL7s2yJv+GAQ/EfWBT64hM7qv4dRqHj3tH65Gs+Rr8Iv9B18rnh7VD87D3j4M2mb7e9HROv3qjKe45+Fn6u/SJ85vW/L7Vvsp+yV7VXPtv6FJ9iIs85ey38H/nlLUXii/EDVAmBWg==:9219</string>
+  <string name="cookie_base64">eJx1kj1uxSAQhG1RUL4j+ChUORdIOZjJTYhSpnGkSKHw82Z/YV9+qD6NxDDszrI8nOh4LwNXqINv0AZvjhMcgzP0eRUu4wAAT+oakaGYJZ5qlpOT40zcfjNMXpmP8RRoCuFzPquJhGFGUCPkZ3vZuHG0a7UXEno4ffmpd8eiQ5i6eHb7St85kXzr5jjyiJhr5ECcsgQ2zWf6h3GIizBc+9TN53D+f+k9Kd83uOcv4gSdxvVGH8ZN0xxehBvxKzG1AfmDciZhEL0KV2nPZNWL6u/Ckfxr5s0E6AEKbqwQnxFK5vkE+lhJzLwU5NP6gNytJ+hzWJeaLngDi/DIWoIySwOuWKcrXHdFPFxZmyu3IBtdWnS68KlIF5rxau7fC2bFxQ==:1A1F</string>
+  <string name="bread_base64">eJzl0j0KAjEQBWBli7WLnWVu4nosCyErFoKN17DyDOsJvIJiZ2PEJmCY50x+FMSFBSvxVR9DMptMttf7wwxenOgms7KaEvvGatTRBZxC0+JDZAHPHorVAqRgp2I9D56F7qHuxmKzA0o4I1/CCVizG+kY6l5cxrqvrPgILLnOVrFOxnF7XIE91z23x01Mht59By4gsA1y2o0Oa7qsrzJJzvnBXu6S4uSOKVZmkiKTzpbX0M+tMqyQ+ACjtDNktT1v6m9/kV/JAz/1HjU=:28FA</string>
+
 </resources>

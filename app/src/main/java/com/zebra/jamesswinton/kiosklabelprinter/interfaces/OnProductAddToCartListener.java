@@ -6,4 +6,5 @@ import com.zebra.jamesswinton.kiosklabelprinter.Product;
 
 public interface OnProductAddToCartListener {
     void onProductAddedToCart(@NonNull Product product, @NonNull Integer quantity);
+    void onProductRemovedFromCart(@NonNull Product product);
 }

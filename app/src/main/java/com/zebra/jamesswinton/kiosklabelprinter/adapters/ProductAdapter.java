@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.zebra.jamesswinton.kiosklabelprinter.App;
 import com.zebra.jamesswinton.kiosklabelprinter.Product;
 import com.zebra.jamesswinton.kiosklabelprinter.R;
 import com.zebra.jamesswinton.kiosklabelprinter.interfaces.OnProductAddToCartListener;
@@ -56,42 +58,40 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         Product product = mProducts.get(position);
 
         // Populate View
+        Glide.with(vh.image)
+                .load(product.getImage())
+                .placeholder(product.getIcon())
+                .into(vh.image);
         vh.image.setImageDrawable(product.getImage());
         vh.title.setText(product.getName());
         vh.price.setText(getPriceFormatted(product.getPrice()) + "€");
 
-        // Handle Quantity
-        vh.removeQuantity.setOnClickListener(view -> {
-            int currentQuantity = Integer.parseInt(vh.quantity.getText().toString());
-
-            // Update Quantity
-            if (currentQuantity > 0) {
-                 currentQuantity--;
-            } else {
-                currentQuantity = 0;
-            }
-
-            // Set Quantity
-            vh.quantity.setText(currentQuantity);
-        });
-
-        vh.addQuantity.setOnClickListener(view -> {
-            int currentQuantity = Integer.parseInt(vh.quantity.getText().toString());
-
-            // Update Quantity
-            currentQuantity++;
-
-            // Set Quantity
-            vh.quantity.setText(currentQuantity);
-        });
+        // Hide Button if in basket
+        if (App.mBasket.containsKey(product)) {
+            // Hide Add Button
+            vh.addToBasketButton.setVisibility(View.GONE);
+            // Show remove Button
+            vh.removeFromBasketButton.setVisibility(View.VISIBLE);
+        }
 
         // Handle Add to Basket
         vh.addToBasketButton.setOnClickListener(view -> {
-            // Get Quantity
-            int quantity = Integer.parseInt(vh.quantity.getText().toString());
-
             // Update Basket
-            mOnProductAddToCartListener.onProductAddedToCart(product, quantity);
+            mOnProductAddToCartListener.onProductAddedToCart(product, 1);
+            // Show remove Button
+            vh.removeFromBasketButton.setVisibility(View.VISIBLE);
+            // Hide Add Button
+            vh.addToBasketButton.setVisibility(View.GONE);
+        });
+
+        // Handle Remove
+        vh.removeFromBasketButton.setOnClickListener(v -> {
+            // Remvoe Product
+            mOnProductAddToCartListener.onProductRemovedFromCart(product);
+            // Hide remove Button
+            vh.removeFromBasketButton.setVisibility(View.GONE);
+            // Show Add Button
+            vh.addToBasketButton.setVisibility(View.VISIBLE);
         });
     }
 
@@ -129,10 +129,7 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         // Views
         ImageView image;
         TextView title, price;
-        ConstraintLayout quantityLayout;
-        ImageView addQuantity, removeQuantity;
-        TextView quantity;
-        Button addToBasketButton;
+        Button addToBasketButton, removeFromBasketButton;
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -141,11 +138,8 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             image = itemView.findViewById(R.id.product_image);
             title = itemView.findViewById(R.id.product_title);
             price = itemView.findViewById(R.id.product_price);
-            quantityLayout = itemView.findViewById(R.id.number_picker_layout_container);
-            addQuantity = quantityLayout.findViewById(R.id.add);
-            removeQuantity = quantityLayout.findViewById(R.id.remove);
-            quantity = quantityLayout.findViewById(R.id.quantity);
             addToBasketButton = itemView.findViewById(R.id.add_to_basket_button);
+            removeFromBasketButton = itemView.findViewById(R.id.remove_from_basket_button);
         }
     }
 }

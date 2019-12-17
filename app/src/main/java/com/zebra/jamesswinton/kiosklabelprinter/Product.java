@@ -1,24 +1,34 @@
 package com.zebra.jamesswinton.kiosklabelprinter;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Base64;
 
+import java.io.ByteArrayOutputStream;
 import java.math.BigInteger;
 
 public class Product {
 
     // Product Enum
     public enum PRODUCT_GROUP { VIENNOISERIE, PATISSERIE, PAIN }
+    public enum PRODUCT_TYPE { MUFFIN, COOKIE, BREAD }
 
     // Variables
     private PRODUCT_GROUP group;
+    private PRODUCT_TYPE type;
     private Drawable image;
     private String name;
     private BigInteger ean;
     private double price;
 
     // Constructor
-    public Product(PRODUCT_GROUP group, Drawable image, String name, BigInteger ean, double price) {
+    public Product(PRODUCT_GROUP group, PRODUCT_TYPE type, Drawable image, String name, BigInteger ean, double price) {
         this.group = group;
+        this.type = type;
         this.image = image;
         this.name = name;
         this.ean = ean;
@@ -32,6 +42,58 @@ public class Product {
 
     public void setGroup(PRODUCT_GROUP group) {
         this.group = group;
+    }
+
+    public PRODUCT_TYPE getType() {
+        return type;
+    }
+
+    public void setType(PRODUCT_TYPE type) {
+        this.type = type;
+    }
+
+    public int getIcon() {
+        int icon;
+        switch (type) {
+            case MUFFIN:
+                icon = R.drawable.ic_muffin;
+                break;
+            case COOKIE:
+                icon = R.drawable.ic_cookie;
+                break;
+            case BREAD:
+                icon = R.drawable.ic_bread;
+                break;
+            default:
+                icon = R.drawable.ic_error;
+        }
+
+        return icon;
+    }
+
+    public static Bitmap drawableToBitmap (Drawable drawable) {
+        if (drawable instanceof BitmapDrawable) {
+            return ((BitmapDrawable)drawable).getBitmap();
+        }
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(),
+                drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
+    }
+
+    public String getIconBase64(Context context) {
+        switch (type) {
+            case MUFFIN:
+                return context.getString(R.string.muffin_base64);
+            case COOKIE:
+                return context.getString(R.string.cookie_base64);
+            case BREAD:
+                return context.getString(R.string.bread_base64);
+            default:
+                return context.getString(R.string.muffin_base64);
+        }
     }
 
     public Drawable getImage() {

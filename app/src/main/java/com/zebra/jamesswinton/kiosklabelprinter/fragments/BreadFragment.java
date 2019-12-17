@@ -52,6 +52,11 @@ public class BreadFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
+        // Init Back in Toolbar
+        if (((MainActivity) getActivity()).getSupportActionBar() != null) {
+            ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         // Init Product Adapter
         mProductAdapter = new ProductAdapter((MainActivity) getActivity());
 

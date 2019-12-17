@@ -1,8 +1,8 @@
 package com.zebra.jamesswinton.kiosklabelprinter.fragments;
 
-
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -21,6 +21,7 @@ import com.zebra.jamesswinton.kiosklabelprinter.R;
 import com.zebra.jamesswinton.kiosklabelprinter.adapters.BasketAdapter;
 import com.zebra.jamesswinton.kiosklabelprinter.adapters.ProductAdapter;
 import com.zebra.jamesswinton.kiosklabelprinter.databinding.FragmentBasketBinding;
+import com.zebra.jamesswinton.kiosklabelprinter.interfaces.OnProductAddToCartListener;
 import com.zebra.jamesswinton.kiosklabelprinter.printing.PrintHandler;
 import com.zebra.jamesswinton.kiosklabelprinter.printing.ZPL;
 
@@ -32,10 +33,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import static com.zebra.jamesswinton.kiosklabelprinter.App.mBasket;
+import static com.zebra.jamesswinton.kiosklabelprinter.printing.ZPL.IMAGE_1;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class BasketFragment extends Fragment {
 
     // Debugging
@@ -49,13 +49,10 @@ public class BasketFragment extends Fragment {
 
     // Public Variables
     private FragmentBasketBinding mDataBinding = null;
-    private HashMap<Product, Integer> mBasket = null;
     private BasketAdapter mBasketAdapter = null;
     private double mBasketTotal = 0.00;
 
-    public BasketFragment(HashMap<Product, Integer> basket) {
-        this.mBasket = basket;
-    }
+    public BasketFragment() { }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,8 +66,33 @@ public class BasketFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
+        // Init Back in Toolbar
+        if (((MainActivity) getActivity()).getSupportActionBar() != null) {
+            ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
         // Init Product Adapter
-        mBasketAdapter = new BasketAdapter();
+        mBasketAdapter = new BasketAdapter(new OnProductAddToCartListener() {
+            @Override
+            public void onProductAddedToCart(@NonNull Product product, @NonNull Integer quantity) {
+
+            }
+
+            @Override
+            public void onProductRemovedFromCart(@NonNull Product product) {
+                // Remove Product
+                mBasket.remove(product);
+
+                // Recalc
+                setBasketTotal();
+
+                // UpdateCounter
+                ((MainActivity) getContext()).updateBasketCounter();
+
+                // Show Products in Adapter
+                mBasketAdapter.loadBasket(mBasket);
+            }
+        });
 
         // Set RecyclerView Layout Manager & Adapter
         mDataBinding.productRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -80,18 +102,17 @@ public class BasketFragment extends Fragment {
         mBasketAdapter.loadBasket(mBasket);
 
         // Set Total
+        setBasketTotal();
+
+        // Set Print Label Click Listener
+        mDataBinding.printLabelButton.setOnClickListener(view -> printLabel());
+    }
+
+    private void setBasketTotal() {
         mBasketTotal = 0;
         for (Product product : mBasket.keySet()) {
             mBasketTotal = mBasketTotal + product.getPrice() * mBasket.get(product);
         } mDataBinding.basketTotal.setText(getPriceFormatted(mBasketTotal) + "€");
-
-        // Set Print Label Click Listener
-        mDataBinding.printLabelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                printLabel();
-            }
-        });
     }
 
     private void printLabel() {
@@ -114,6 +135,7 @@ public class BasketFragment extends Fragment {
             variableData.put(ZPL.PRICE, getPriceFormatted(product.getPrice()) + "€");
             variableData.put(ZPL.QUANTITY, String.valueOf(mBasket.get(product)));
             variableData.put(ZPL.BARCODE, product.getEan().toString());
+            variableData.put(ZPL.IMAGE_1, product.getIconBase64(getContext()));
 
             PrintHandler.sendPrintJobWithContent(getContext(), templateBytes, variableData,
                     ((MainActivity) getContext()).printResultReceiver);
@@ -126,6 +148,11 @@ public class BasketFragment extends Fragment {
             variableData.put(ZPL.PRICE, getPriceFormatted(mBasketTotal) + "€");
             variableData.put(ZPL.BARCODE, QueueBustingQrCodeGenerator
                     .generatorQrCodeStringFromBasket(mBasket));
+            variableData.put(ZPL.IMAGE_1, productsInBasket[0].getIconBase64(getContext()));
+            variableData.put(ZPL.IMAGE_2, productsInBasket[1].getIconBase64(getContext()));
+            if (productsInBasket.length > 2) {
+                variableData.put(ZPL.IMAGE_3, productsInBasket[2].getIconBase64(getContext()));
+            }
 
             PrintHandler.sendPrintJobWithContent(getContext(), templateBytes, variableData,
                     ((MainActivity) getContext()).printResultReceiver);

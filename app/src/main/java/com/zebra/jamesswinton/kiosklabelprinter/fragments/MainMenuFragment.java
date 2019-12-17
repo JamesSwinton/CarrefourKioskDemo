@@ -43,6 +43,11 @@ public class MainMenuFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
+        // Disable Back in Toolbar
+        if (((MainActivity) getActivity()).getSupportActionBar() != null) {
+            ((MainActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        }
+
         // Init Click Listeners
         mDataBinding.breadContainer.setOnClickListener(view -> {
             if (getActivity() != null) {

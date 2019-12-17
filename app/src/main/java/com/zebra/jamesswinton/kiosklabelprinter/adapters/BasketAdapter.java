@@ -24,7 +24,8 @@ public class BasketAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private static final String TAG = "ProductAdapter";
 
     // Constants
-
+    private static final int POPULATED = 0;
+    private static final int EMPTY = 1;
 
     // Private Variables
     private HashMap<Product, Integer> mBasket;
@@ -34,29 +35,41 @@ public class BasketAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     // Public Variables
 
 
-    public BasketAdapter() {
-
+    public BasketAdapter(OnProductAddToCartListener onProductAddToCartListener) {
+        this.mOnProductAddToCartListener = onProductAddToCartListener;
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new BasketViewHolder(LayoutInflater.from(
-                parent.getContext()).inflate(R.layout.adapter_basket, parent, false));
+        switch (viewType) {
+            case EMPTY:
+                return new EmptyViewHolder(LayoutInflater.from(
+                        parent.getContext()).inflate(R.layout.adapter_empty_basket, parent, false));
+            case POPULATED:
+            default:
+                return new BasketViewHolder(LayoutInflater.from(
+                        parent.getContext()).inflate(R.layout.adapter_basket, parent, false));
+        }
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
-        // Cast ViewHolder to PopulatedViewHolder
-        BasketViewHolder vh = (BasketViewHolder) viewHolder;
+        if (viewHolder instanceof BasketViewHolder) {
+            // Cast ViewHolder to PopulatedViewHolder
+            BasketViewHolder vh = (BasketViewHolder) viewHolder;
 
-        // Get Recall
-        Product product = mProducts[position];
+            // Get Recall
+            Product product = mProducts[position];
 
-        // Populate View
-        vh.title.setText(product.getName());
-        vh.image.setImageDrawable(product.getImage());
-        vh.price.setText("€" + getPriceFormatted(product.getPrice()));
+            // Populate View
+            vh.title.setText(product.getName());
+            vh.price.setText(getPriceFormatted(product.getPrice()) + "€");
+            vh.quantity.setText("x" + mBasket.get(product));
+            vh.deleteProduct.setOnClickListener(v -> {
+                mOnProductAddToCartListener.onProductRemovedFromCart(product);
+            });
+        }
     }
 
     private String getPriceFormatted(double realNumber) {
@@ -67,12 +80,12 @@ public class BasketAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public int getItemViewType(int position) {
-        return super.getItemViewType(position);
+        return mBasket == null || mBasket.isEmpty() ? EMPTY : POPULATED;
     }
 
     @Override
     public int getItemCount() {
-        return mBasket.size();
+        return mBasket.size() == 0 || mBasket.isEmpty() ? 1 : mBasket.size();
     }
 
     /**
@@ -93,15 +106,23 @@ public class BasketAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
         // Views
         private ImageView image;
+        private TextView quantity;
         private TextView price, title;
+        private ImageView deleteProduct;
 
         public BasketViewHolder(@NonNull View itemView) {
             super(itemView);
-
             this.image = itemView.findViewById(R.id.product_image);
             this.title = itemView.findViewById(R.id.product_title);
             this.price = itemView.findViewById(R.id.product_price);
+            this.quantity = itemView.findViewById(R.id.product_quantity);
+            this.deleteProduct = itemView.findViewById(R.id.delete);
+        }
+    }
 
+    public class EmptyViewHolder extends RecyclerView.ViewHolder {
+        public EmptyViewHolder(@NonNull View itemView) {
+            super(itemView);
         }
     }
 }
