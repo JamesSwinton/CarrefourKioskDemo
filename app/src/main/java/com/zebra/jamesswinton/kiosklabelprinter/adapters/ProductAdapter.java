@@ -19,6 +19,7 @@ import com.zebra.jamesswinton.kiosklabelprinter.Product;
 import com.zebra.jamesswinton.kiosklabelprinter.R;
 import com.zebra.jamesswinton.kiosklabelprinter.interfaces.OnProductAddToCartListener;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
@@ -64,7 +65,7 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 .into(vh.image);
         vh.image.setImageDrawable(product.getImage());
         vh.title.setText(product.getName());
-        vh.price.setText(getPriceFormatted(product.getPrice()) + "€");
+        vh.price.setText(getPriceFormatted(product.getPrice()));
 
         // Hide Button if in basket
         if (App.mBasket.containsKey(product)) {
@@ -96,9 +97,7 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     private String getPriceFormatted(double realNumber) {
-        NumberFormat nf = NumberFormat.getInstance(Locale.getDefault());
-        nf.setMaximumFractionDigits(10);
-        return String.format("%s", nf.format(realNumber));
+        return new DecimalFormat("##,##0.00€").format(realNumber);
     }
 
     @Override

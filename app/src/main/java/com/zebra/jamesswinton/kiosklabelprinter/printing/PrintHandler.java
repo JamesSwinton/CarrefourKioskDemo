@@ -31,6 +31,10 @@ public class PrintHandler {
     // Public Variables
 
 
+    /**
+     * Public Utility Methods
+     */
+
     // Sends Print job via intent to PrintConnect service - Uses template & variable data
     public static void sendPrintJobWithContent(Context context, byte[] templateBytes,
                                                HashMap<String, String> variableData,
@@ -42,6 +46,10 @@ public class PrintHandler {
         sendPrintJob.putExtra(RESULT_RECEIVER, buildSafeReceiver(resultReceiver));
         context.startService(sendPrintJob);
     }
+
+    /**
+     * Private Utility Methods
+     */
 
     // This method makes your ResultReceiver safe for inter-process communication
     private static ResultReceiver buildSafeReceiver(ResultReceiver actualReceiver) {

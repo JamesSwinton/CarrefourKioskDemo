@@ -26,6 +26,7 @@ import com.zebra.jamesswinton.kiosklabelprinter.printing.PrintHandler;
 import com.zebra.jamesswinton.kiosklabelprinter.printing.ZPL;
 
 import java.nio.charset.StandardCharsets;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -109,10 +110,10 @@ public class BasketFragment extends Fragment {
     }
 
     private void setBasketTotal() {
-        mBasketTotal = 0;
+        mBasketTotal = 0.00;
         for (Product product : mBasket.keySet()) {
             mBasketTotal = mBasketTotal + product.getPrice() * mBasket.get(product);
-        } mDataBinding.basketTotal.setText(getPriceFormatted(mBasketTotal) + "€");
+        } mDataBinding.basketTotal.setText(getPriceFormatted(mBasketTotal));
     }
 
     private void printLabel() {
@@ -123,45 +124,13 @@ public class BasketFragment extends Fragment {
         if (productsInBasket.length == 0) {
             Log.i(TAG, "No products in basket");
         } else if (productsInBasket.length == 1) {
-            // Convert ZPL to Byte[]
-            byte[] templateBytes = ZPL.SINGLE_ITEM_ZPL.getBytes(StandardCharsets.UTF_8);
-
-            // Get Product
-            Product product = productsInBasket[0];
-
-            // Set Variable Data
-            HashMap<String, String> variableData = new HashMap<>();
-            variableData.put(ZPL.ITEM, product.getName());
-            variableData.put(ZPL.PRICE, getPriceFormatted(product.getPrice()) + "€");
-            variableData.put(ZPL.QUANTITY, String.valueOf(mBasket.get(product)));
-            variableData.put(ZPL.BARCODE, product.getEan().toString());
-            variableData.put(ZPL.IMAGE_1, product.getIconBase64(getContext()));
-
-            PrintHandler.sendPrintJobWithContent(getContext(), templateBytes, variableData,
-                    ((MainActivity) getContext()).printResultReceiver);
+            ((MainActivity) getContext()).printReceiptSingleItem(productsInBasket[0]);
         } else {
-            // Convert ZPL to Byte[]
-            byte[] templateBytes = ZPL.MULTI_ITEM_ZPL.getBytes(StandardCharsets.UTF_8);
-
-            // Set Variable Data
-            HashMap<String, String> variableData = new HashMap<>();
-            variableData.put(ZPL.PRICE, getPriceFormatted(mBasketTotal) + "€");
-            variableData.put(ZPL.BARCODE, QueueBustingQrCodeGenerator
-                    .generatorQrCodeStringFromBasket(mBasket));
-            variableData.put(ZPL.IMAGE_1, productsInBasket[0].getIconBase64(getContext()));
-            variableData.put(ZPL.IMAGE_2, productsInBasket[1].getIconBase64(getContext()));
-            if (productsInBasket.length > 2) {
-                variableData.put(ZPL.IMAGE_3, productsInBasket[2].getIconBase64(getContext()));
-            }
-
-            PrintHandler.sendPrintJobWithContent(getContext(), templateBytes, variableData,
-                    ((MainActivity) getContext()).printResultReceiver);
+            ((MainActivity) getContext()).printReceiptMultipleItems(productsInBasket, mBasketTotal);
         }
     }
 
     private String getPriceFormatted(double realNumber) {
-        NumberFormat nf = NumberFormat.getInstance(Locale.getDefault());
-        nf.setMaximumFractionDigits(10);
-        return String.format("%s", nf.format(realNumber));
+        return new DecimalFormat("##,##0.00€").format(realNumber);
     }
 }

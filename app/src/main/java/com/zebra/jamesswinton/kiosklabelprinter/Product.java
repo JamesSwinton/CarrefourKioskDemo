@@ -2,13 +2,12 @@ package com.zebra.jamesswinton.kiosklabelprinter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.util.Base64;
 
-import java.io.ByteArrayOutputStream;
+import com.zebra.jamesswinton.kiosklabelprinter.printing.ZPL;
+
 import java.math.BigInteger;
 
 public class Product {
@@ -83,16 +82,29 @@ public class Product {
         return bitmap;
     }
 
-    public String getIconBase64(Context context) {
+    public String getSingleIconBase64() {
         switch (type) {
             case MUFFIN:
-                return context.getString(R.string.muffin_base64);
+                return ZPL.SINGLE_MUFFIN_IMAGE_64;
             case COOKIE:
-                return context.getString(R.string.cookie_base64);
+                return ZPL.SINGLE_COOKIE_IMAGE_64;
             case BREAD:
-                return context.getString(R.string.bread_base64);
+                return ZPL.SINGLE_BREAD_IMAGE_64;
             default:
-                return context.getString(R.string.muffin_base64);
+                return "";
+        }
+    }
+
+    public String getMultipleIconBase64() {
+        switch (type) {
+            case MUFFIN:
+                return ZPL.MUFFIN_IMAGE_64;
+            case COOKIE:
+                return ZPL.COOKIE_IMAGE_64;
+            case BREAD:
+                return ZPL.BREAD_IMAGE_64;
+            default:
+                return "";
         }
     }
 

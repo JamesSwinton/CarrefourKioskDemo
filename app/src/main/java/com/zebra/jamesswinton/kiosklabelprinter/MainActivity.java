@@ -10,7 +10,6 @@ import android.os.ResultReceiver;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -20,7 +19,13 @@ import com.zebra.jamesswinton.kiosklabelprinter.fragments.BreadFragment;
 import com.zebra.jamesswinton.kiosklabelprinter.fragments.MainMenuFragment;
 import com.zebra.jamesswinton.kiosklabelprinter.fragments.PastriesFragment;
 import com.zebra.jamesswinton.kiosklabelprinter.interfaces.OnProductAddToCartListener;
+import com.zebra.jamesswinton.kiosklabelprinter.printing.PrintHandler;
+import com.zebra.jamesswinton.kiosklabelprinter.printing.ZPL;
 import com.zebra.jamesswinton.kiosklabelprinter.utilities.CustomDialog;
+
+import java.nio.charset.StandardCharsets;
+import java.text.DecimalFormat;
+import java.util.HashMap;
 
 import static com.zebra.jamesswinton.kiosklabelprinter.App.mBasket;
 
@@ -34,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements OnProductAddToCar
     private static final String PASTRIES_FRAGMENT = "pastries";
     private static final String BASKET_FRAGMENT = "basket";
 
-    private static final int PRINT_FAILURE = 0;
+    private static final int PRINT_SUCCESS = 0;
     private static final String PRINT_ERROR_STRING = "com.zebra.printconnect.PrintService.ERROR_MESSAGE";
 
     // Private Variables
@@ -187,19 +192,21 @@ public class MainActivity extends AppCompatActivity implements OnProductAddToCar
             Log.i(TAG, "Print Result Code: " + resultCode);
 
             // Handle Print Result
-            if (resultCode != PRINT_FAILURE) {
-                // Handle Success
-                CustomDialog.showCustomDialog(MainActivity.this, CustomDialog.DialogType.SUCCESS,
-                        "Receipt Printed", "Successfully printed receipt. Please " +
-                                "check your printer for your label & then attach to your product.");
-            } else {
-                // Handle Failure
-                String errorMessage = resultData.getString(PRINT_ERROR_STRING);
-                CustomDialog.showCustomDialog(MainActivity.this, CustomDialog.DialogType.ERROR,
-                        "Print Failed!", errorMessage);
+            runOnUiThread(() -> {
+                if (resultCode == PRINT_SUCCESS) {
+                    // Handle Success
+                    CustomDialog.showCustomDialog(MainActivity.this, CustomDialog.DialogType.SUCCESS,
+                            "Receipt Printed", "Successfully printed receipt. Please " +
+                                    "check your printer for your label & then attach to your product.");
+                } else {
+                    // Handle Failure
+                    String errorMessage = resultData.getString(PRINT_ERROR_STRING);
+                    CustomDialog.showCustomDialog(MainActivity.this, CustomDialog.DialogType.ERROR,
+                            "Print Failed!", errorMessage == null || errorMessage.isEmpty() ? "" : errorMessage);
 
-                // TODO: Add re-try print to Error Dialog
-            }
+                    // TODO: Add re-try print to Error Dialog
+                }
+            });
         }
     };
 
@@ -207,5 +214,44 @@ public class MainActivity extends AppCompatActivity implements OnProductAddToCar
      * Print Job Utility Methods
      */
 
+    public void printReceiptSingleItem(Product product) {
+        // Convert ZPL to Byte[]
+        byte[] templateBytes = ZPL.SINGLE_ITEM_ZPL.getBytes(StandardCharsets.UTF_8);
+
+        // Set Variable Data
+        HashMap<String, String> variableData = new HashMap<>();
+        variableData.put(ZPL.ITEM, product.getName());
+        variableData.put(ZPL.PRICE, getPriceFormatted(product.getPrice()));
+        variableData.put(ZPL.QUANTITY, String.valueOf(mBasket.get(product)));
+        variableData.put(ZPL.BARCODE, product.getEan().toString());
+        variableData.put(ZPL.IMAGE_1, product.getSingleIconBase64());
+
+        PrintHandler.sendPrintJobWithContent(this, templateBytes, variableData,
+                printResultReceiver);
+    }
+
+    public void printReceiptMultipleItems(Product[] products, double basketTotal) {
+        // Convert ZPL to Byte[]
+        byte[] templateBytes = ZPL.MULTI_ITEM_ZPL.getBytes(StandardCharsets.UTF_8);
+
+        // Set Variable Data
+        HashMap<String, String> variableData = new HashMap<>();
+        variableData.put(ZPL.PRICE, getPriceFormatted(basketTotal));
+        variableData.put(ZPL.BARCODE, QueueBustingQrCodeGenerator
+                .generatorQrCodeStringFromBasket(mBasket));
+        variableData.put(ZPL.IMAGE_1, products[0].getMultipleIconBase64());
+        variableData.put(ZPL.IMAGE_2, products[1].getMultipleIconBase64());
+        if (products.length > 2) {
+            variableData.put(ZPL.IMAGE_3, products[2].getMultipleIconBase64());
+        }
+
+        // Send Print Job
+        PrintHandler.sendPrintJobWithContent(this, templateBytes, variableData,
+                printResultReceiver);
+    }
+
+    private String getPriceFormatted(double realNumber) {
+        return new DecimalFormat("##,##0.00€").format(realNumber);
+    }
 
 }
