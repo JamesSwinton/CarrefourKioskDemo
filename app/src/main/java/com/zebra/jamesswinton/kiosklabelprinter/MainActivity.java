@@ -3,8 +3,10 @@ package com.zebra.jamesswinton.kiosklabelprinter;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.ResultReceiver;
 import android.util.Log;
@@ -67,9 +69,8 @@ public class MainActivity extends AppCompatActivity implements OnProductAddToCar
         setSupportActionBar(mDataBinding.toolbarLayout.toolbar);
 
         // Show Main Fragment
-        MainMenuFragment mainFragment = new MainMenuFragment();
         mFragmentManager.beginTransaction()
-                .replace(R.id.fragment_holder, mainFragment)
+                .replace(R.id.fragment_holder, new MainMenuFragment())
                 .commit();
     }
 
@@ -194,10 +195,12 @@ public class MainActivity extends AppCompatActivity implements OnProductAddToCar
             // Handle Print Result
             runOnUiThread(() -> {
                 if (resultCode == PRINT_SUCCESS) {
-                    // Handle Success
+                    // Handle Success (Show success dialog, restart app on confirm)
                     CustomDialog.showCustomDialog(MainActivity.this, CustomDialog.DialogType.SUCCESS,
                             "Receipt Printed", "Successfully printed receipt. Please " +
-                                    "check your printer for your label & then attach to your product.");
+                                    "check your printer for your label & then attach to your product.",
+                            "OK", (dialog, which) -> restartKioskState(),
+                            "", null);
                 } else {
                     // Handle Failure
                     String errorMessage = resultData.getString(PRINT_ERROR_STRING);
@@ -209,6 +212,24 @@ public class MainActivity extends AppCompatActivity implements OnProductAddToCar
             });
         }
     };
+
+    private void restartKioskState() {
+        // Clear Current Basket
+        mBasket.clear();
+
+        // Update Basket counter
+        updateBasketCounter();
+
+        // Remove Fragments from BackStack
+        for (Fragment fragment : mFragmentManager.getFragments()) {
+            getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+        }
+
+        // Show Main Fragment
+        mFragmentManager.beginTransaction()
+                .replace(R.id.fragment_holder, new MainMenuFragment())
+                .commit();
+    }
 
     /**
      * Print Job Utility Methods
