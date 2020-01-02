@@ -18,7 +18,7 @@
         android:id="@+id/product_card"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="9"
+        android:layout_weight="8"
         app:contentPadding="8dp"
         app:cardCornerRadius="8dp"
         app:cardElevation="4dp">
@@ -72,8 +72,9 @@
         android:id="@+id/print_label_button"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:text="PRINT LABEL" />
+        android:layout_weight="2"
+        android:text="PRINT LABEL"
+        android:backgroundTint="@color/success"/>
 
     </LinearLayout>
 
