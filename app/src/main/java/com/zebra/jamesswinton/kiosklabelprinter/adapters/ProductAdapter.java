@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.NumberPicker;
 import android.widget.TextView;
@@ -67,32 +68,39 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         vh.title.setText(product.getName());
         vh.price.setText(getPriceFormatted(product.getPrice()));
 
-        // Hide Button if in basket
-        if (App.mBasket.containsKey(product)) {
-            // Hide Add Button
-            vh.addToBasketButton.setVisibility(View.GONE);
-            // Show remove Button
-            vh.removeFromBasketButton.setVisibility(View.VISIBLE);
-        }
+        // Get Quantity
+        Integer qty = App.mBasket.get(product) == null ? 0 : App.mBasket.get(product);
+        int mQuantity = qty == null ? 0 : qty;
+        vh.quantity.setText(String.valueOf(mQuantity));
 
-        // Handle Add to Basket
-        vh.addToBasketButton.setOnClickListener(view -> {
-            // Update Basket
+        // Enable / Disable Remove
+        vh.reduceQuantity.setEnabled(mQuantity != 0);
+
+        // Add / Remove Listeners
+        vh.addQuantity.setOnClickListener(view -> {
             mOnProductAddToCartListener.onProductAddedToCart(product, 1);
-            // Show remove Button
-            vh.removeFromBasketButton.setVisibility(View.VISIBLE);
-            // Hide Add Button
-            vh.addToBasketButton.setVisibility(View.GONE);
+
+            // Update Quantity
+            vh.quantity.setText(String.valueOf(mQuantity + 1));
+
+            // Set Button
+            vh.reduceQuantity.setEnabled(true);
+
+            // Update
+            notifyItemChanged(position);
         });
 
-        // Handle Remove
-        vh.removeFromBasketButton.setOnClickListener(v -> {
-            // Remvoe Product
+        vh.reduceQuantity.setOnClickListener(view -> {
             mOnProductAddToCartListener.onProductRemovedFromCart(product);
-            // Hide remove Button
-            vh.removeFromBasketButton.setVisibility(View.GONE);
-            // Show Add Button
-            vh.addToBasketButton.setVisibility(View.VISIBLE);
+
+            // Update Quantity
+            vh.quantity.setText(String.valueOf(mQuantity - 1));
+
+            // Set Button State
+            vh.reduceQuantity.setEnabled(mQuantity - 1 != 0);
+
+            // Update
+            notifyItemChanged(position);
         });
     }
 
@@ -128,7 +136,8 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         // Views
         ImageView image;
         TextView title, price;
-        Button addToBasketButton, removeFromBasketButton;
+        TextView quantity;
+        ImageButton addQuantity, reduceQuantity;
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -137,8 +146,9 @@ public class ProductAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             image = itemView.findViewById(R.id.product_image);
             title = itemView.findViewById(R.id.product_title);
             price = itemView.findViewById(R.id.product_price);
-            addToBasketButton = itemView.findViewById(R.id.add_to_basket_button);
-            removeFromBasketButton = itemView.findViewById(R.id.remove_from_basket_button);
+            quantity = itemView.findViewById(R.id.quantity);
+            addQuantity = itemView.findViewById(R.id.add_quantity);
+            reduceQuantity = itemView.findViewById(R.id.remove_quantity);
         }
     }
 }

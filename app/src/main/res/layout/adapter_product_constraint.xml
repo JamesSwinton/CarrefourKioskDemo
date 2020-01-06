@@ -79,44 +79,61 @@
         app:layout_constraintTop_toBottomOf="@id/title_and_price_layout"
         app:layout_constraintVertical_weight="0.5">
 
-        <View
-          android:id="@+id/spacer"
+        <TextView
+          android:id="@+id/label"
           android:layout_width="0dp"
           android:layout_height="match_parent"
-          app:layout_constraintHorizontal_weight="2"
-          app:layout_constraintLeft_toLeftOf="parent"
-          app:layout_constraintRight_toLeftOf="@id/remove_from_basket_button" />
+          android:text="ADD TO CART"
+          android:textStyle="bold"
+          android:textSize="16sp"
+          android:gravity="center_vertical"
+          app:layout_constraintStart_toStartOf="parent"
+          app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toStartOf="@id/remove_quantity"
+          app:layout_constraintHorizontal_weight="0.7"/>
 
-        <Button
-          android:id="@+id/remove_from_basket_button"
-          style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-          android:layout_width="0dp"
-          android:layout_height="match_parent"
-          android:text="REMOVE"
-          android:visibility="gone"
-          app:layout_constraintHorizontal_weight="1"
-          app:layout_constraintLeft_toRightOf="@id/spacer"
-          app:layout_constraintRight_toLeftOf="@id/spacer_2" />
+        <ImageButton
+          android:id="@+id/remove_quantity"
+          android:layout_width="32dp"
+          android:layout_height="32dp"
+          android:background="@drawable/shape_rounded_corners"
+          android:src="@drawable/ic_remove"
+          android:tint="#FFF"
+          app:layout_constraintStart_toEndOf="@id/label"
+          app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toStartOf="@id/quantity"
+          app:layout_constraintHorizontal_weight="0.1" />
 
-        <View
-          android:id="@+id/spacer_2"
+        <TextView
+          android:id="@+id/quantity"
           android:layout_width="0dp"
           android:layout_height="match_parent"
-          app:layout_constraintHorizontal_weight="0.05"
-          app:layout_constraintLeft_toRightOf="@id/remove_from_basket_button"
-          app:layout_constraintRight_toLeftOf="@id/add_to_basket_button" />
+          android:text="1"
+          android:textStyle="bold"
+          android:textSize="16sp"
+          android:gravity="center"
+          app:layout_constraintStart_toEndOf="@id/remove_quantity"
+          app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toStartOf="@id/add_quantity"
+          app:layout_constraintHorizontal_weight="0.1"/>
 
-        <Button
-          android:id="@+id/add_to_basket_button"
-          android:layout_width="0dp"
-          android:layout_height="match_parent"
-          android:text="ADD"
-          app:layout_constraintHorizontal_weight="1"
-          app:layout_constraintLeft_toRightOf="@id/spacer_2"
-          app:layout_constraintRight_toRightOf="parent" />
+        <ImageButton
+          android:id="@+id/add_quantity"
+          android:layout_width="32dp"
+          android:layout_height="32dp"
+          android:background="@drawable/shape_rounded_corners"
+          android:src="@drawable/ic_add"
+          android:tint="#FFF"
+          app:layout_constraintStart_toEndOf="@id/quantity"
+          app:layout_constraintTop_toTopOf="parent"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintEnd_toEndOf="parent"
+          app:layout_constraintHorizontal_weight="0.1" />
 
       </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

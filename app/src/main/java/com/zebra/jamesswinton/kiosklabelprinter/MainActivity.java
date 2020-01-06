@@ -101,8 +101,16 @@ public class MainActivity extends AppCompatActivity implements OnProductAddToCar
     @Override
     public void onProductRemovedFromCart(@NonNull Product product) {
         if (mBasket.containsKey(product)) {
-            // Remove Product
-            mBasket.remove(product);
+            // Get Quantity
+            Integer qty = App.mBasket.get(product) == null ? 0 : App.mBasket.get(product);
+            int quantity = qty == null ? 0 : qty;
+
+            // Check if we need to remove or reduce
+            if (quantity == 1) {
+                mBasket.remove(product);
+            } else {
+                mBasket.put(product, quantity - 1);
+            }
 
             // Update Counter
             updateBasketCounter();
@@ -242,7 +250,7 @@ public class MainActivity extends AppCompatActivity implements OnProductAddToCar
         // Set Variable Data
         HashMap<String, String> variableData = new HashMap<>();
         variableData.put(ZPL.ITEM, product.getName());
-        variableData.put(ZPL.PRICE, getPriceFormatted(product.getPrice()));
+        variableData.put(ZPL.PRICE, "Prix: " + getPriceFormatted(product.getPrice()));
         variableData.put(ZPL.QUANTITY, String.valueOf(mBasket.get(product)));
         variableData.put(ZPL.BARCODE, product.getEan().toString());
         variableData.put(ZPL.IMAGE_1, product.getSingleIconBase64());
@@ -257,13 +265,18 @@ public class MainActivity extends AppCompatActivity implements OnProductAddToCar
 
         // Set Variable Data
         HashMap<String, String> variableData = new HashMap<>();
-        variableData.put(ZPL.PRICE, getPriceFormatted(basketTotal));
+        variableData.put(ZPL.PRICE, "Prix: " + getPriceFormatted(basketTotal));
         variableData.put(ZPL.BARCODE, QueueBustingQrCodeGenerator
                 .generatorQrCodeStringFromBasket(mBasket));
         variableData.put(ZPL.IMAGE_1, products[0].getMultipleIconBase64());
+        variableData.put(ZPL.IMAGE_1_QUANTITY, "x" + mBasket.get(products[0]));
         variableData.put(ZPL.IMAGE_2, products[1].getMultipleIconBase64());
+        variableData.put(ZPL.IMAGE_2_QUANTITY, "x" + mBasket.get(products[1]));
         if (products.length > 2) {
             variableData.put(ZPL.IMAGE_3, products[2].getMultipleIconBase64());
+            variableData.put(ZPL.IMAGE_3_QUANTITY, "x" + mBasket.get(products[2]));
+        } else {
+            variableData.put(ZPL.IMAGE_3_QUANTITY, "");
         }
 
         // Send Print Job
