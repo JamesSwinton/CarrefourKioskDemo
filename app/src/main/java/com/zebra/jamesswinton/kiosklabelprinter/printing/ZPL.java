@@ -50,7 +50,7 @@ public class ZPL {
             "^LL406\n" +
             "^LS0\n" +
             "^FT93,286^A0N,51,53^FH\\^CI28^FD" + PRICE + "^FS^CI27\n" +
-            "^FT60,56^A0N,51,53^FH\\^CI28^FD" + ITEM + QUANTITY + "^FS^CI27\n" +
+            "^FT60,56^A0N,51,53^FH\\^CI28^FD" + QUANTITY + ITEM  + "^FS^CI27\n" +
             "^BY3,2,67^FT90,366^BEN,,Y,N\n" +
             "^FH\\^FD" + BARCODE + "^FS\n" +
             "^FO138,76" + IMAGE_1 + "\n" +
@@ -122,9 +122,9 @@ public class ZPL {
             "^FT166,401^BQN,2,2\n" +
             "^FH\\^FDMA," + BARCODE + "^FS\n" +
             "^FO167,97" + IMAGE_2 + "\n" +
-            "^FT208,91^AAN,27,15^FH\\^FD" + IMAGE_1_QUANTITY + "^FS\n" +
+            "^FT208,91^AAN,27,15^FH\\^FD" + IMAGE_2_QUANTITY + "^FS\n" +
             "^FT369,91^AAN,27,15^FH\\^FD" + IMAGE_3_QUANTITY + "^FS\n" +
-            "^FT56,91^AAN,27,15^FH\\^FD" + IMAGE_2_QUANTITY + "^FS\n" +
+            "^FT56,91^AAN,27,15^FH\\^FD" + IMAGE_1_QUANTITY + "^FS\n" +
             "^PQ1,0,1,Y\n" +
             "^XZ";
 }

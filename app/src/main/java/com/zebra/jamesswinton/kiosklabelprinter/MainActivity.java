@@ -250,8 +250,8 @@ public class MainActivity extends AppCompatActivity implements OnProductAddToCar
         // Set Variable Data
         HashMap<String, String> variableData = new HashMap<>();
         variableData.put(ZPL.ITEM, product.getName());
-        variableData.put(ZPL.PRICE, "Prix: " + getPriceFormatted(product.getPrice()));
-        variableData.put(ZPL.QUANTITY, String.valueOf(mBasket.get(product)));
+        variableData.put(ZPL.PRICE, "Prix: " + getPriceFormatted(product.getPrice() * mBasket.get(product)));
+        variableData.put(ZPL.QUANTITY, "x" + mBasket.get(product) + " ");
         variableData.put(ZPL.BARCODE, product.getEan().toString());
         variableData.put(ZPL.IMAGE_1, product.getSingleIconBase64());
 
