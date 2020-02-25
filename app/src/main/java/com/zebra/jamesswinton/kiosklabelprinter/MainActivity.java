@@ -268,10 +268,20 @@ public class MainActivity extends AppCompatActivity implements OnProductAddToCar
         variableData.put(ZPL.PRICE, "Prix: " + getPriceFormatted(basketTotal));
         variableData.put(ZPL.BARCODE, QueueBustingQrCodeGenerator
                 .generatorQrCodeStringFromBasket(mBasket));
+
+        // Handle First Product
         variableData.put(ZPL.IMAGE_1, products[0].getMultipleIconBase64());
         variableData.put(ZPL.IMAGE_1_QUANTITY, "x" + mBasket.get(products[0]));
-        variableData.put(ZPL.IMAGE_2, products[1].getMultipleIconBase64());
-        variableData.put(ZPL.IMAGE_2_QUANTITY, "x" + mBasket.get(products[1]));
+
+        // Handle 2nd Product (if present)
+        if (products.length > 1) {
+            variableData.put(ZPL.IMAGE_2, products[1].getMultipleIconBase64());
+            variableData.put(ZPL.IMAGE_2_QUANTITY, "x" + mBasket.get(products[1]));
+        } else {
+            variableData.put(ZPL.IMAGE_2_QUANTITY, "");
+        }
+
+        // Handle 3rd Product (if present)
         if (products.length > 2) {
             variableData.put(ZPL.IMAGE_3, products[2].getMultipleIconBase64());
             variableData.put(ZPL.IMAGE_3_QUANTITY, "x" + mBasket.get(products[2]));
