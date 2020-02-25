@@ -57,40 +57,6 @@ public class ZPL {
             "^PQ1,0,1,Y\n" +
             "^XZ";
 
-    public static final String MULTI_ITEM_ZPL_OLD =
-            "CT~~CD,~CC^~CT~\n" +
-            "^XA\n" +
-            "~TA000\n" +
-            "~JSN\n" +
-            "^LT0\n" +
-            "^MNV\n" + // TODO: Change this back to ^MNW
-            "^MTD\n" +
-            "^PON\n" +
-            "^PMN\n" +
-            "^LH0,0\n" +
-            "^JMA\n" +
-            "^PR4,4\n" +
-            "~SD20\n" +
-            "^JUS\n" +
-            "^LRN\n" +
-            "^CI27\n" +
-            "^PA0,1,1,0\n" +
-            "^XZ\n" +
-            "^XA\n" +
-            "^MMT\n" +
-            "^PW448\n" +
-            "^LL406\n" +
-            "^LS0\n" +
-            "^FT97,232^A0N,51,53^FH\\^CI28^FD" + PRICE + "^FS^CI27\n" +
-            "^FT97,60^A0N,51,53^FH\\^CI28^FDDivers Vrac^FS^CI27\n" +
-            "^FO8,91" + IMAGE_1 + "\n" +
-            "^FT166,397^BQN,2,4\n" +
-            "^FH\\^FDMA," + BARCODE + "^FS\n" +
-            "^FO175,91" + IMAGE_2 + "\n" +
-            "^FO343,91" + IMAGE_3 + "\n" +
-            "^PQ1,0,1,Y\n" +
-            "^XZ";
-
     public static final String MULTI_ITEM_ZPL =
             "CT~~CD,~CC^~CT~\n" +
             "^XA\n" +
@@ -119,7 +85,7 @@ public class ZPL {
             "^FT97,60^A0N,51,53^FH\\^CI28^FDDivers Vrac^FS^CI27\n" +
             "^FO26,106" + IMAGE_1 + "\n" +
             "^FO338,105" + IMAGE_3 + "\n" +
-            "^FT166,401^BQN,2,2\n" +
+            "^FT166,401^BQN,2,3\n" + // Changed BQN,2,2 to BQN,2,3
             "^FH\\^FDMA," + BARCODE + "^FS\n" +
             "^FO167,97" + IMAGE_2 + "\n" +
             "^FT208,91^AAN,27,15^FH\\^FD" + IMAGE_2_QUANTITY + "^FS\n" +
