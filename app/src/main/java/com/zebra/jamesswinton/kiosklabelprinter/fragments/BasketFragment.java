@@ -124,7 +124,11 @@ public class BasketFragment extends Fragment {
         if (productsInBasket.length == 0) {
             Log.i(TAG, "No products in basket");
         } else if (productsInBasket.length == 1) {
-            ((MainActivity) getContext()).printReceiptSingleItem(productsInBasket[0]);
+            if (mBasket.get(productsInBasket[0]) <= 1) {
+                ((MainActivity) getContext()).printReceiptSingleItem(productsInBasket[0]);
+            } else {
+                ((MainActivity) getContext()).printReceiptMultipleItems(productsInBasket, mBasketTotal);
+            }
         } else {
             ((MainActivity) getContext()).printReceiptMultipleItems(productsInBasket, mBasketTotal);
         }
